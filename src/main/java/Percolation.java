@@ -7,9 +7,6 @@ public class Percolation {
     public Percolation(int N){
         virtualNode = N * N;
         uf = new WeightedQuickUnionUF(N * N + 1); //uf.id[N * N] is the virtual top node.
-        for (int i = 0; i < N; i++){ //connect top N node with virtual node.
-            uf.union(virtualNode, i);
-        }
         this.N = N;
         openSites = new boolean[N * N];
         for (int i = 0; i < N * N; i++){
@@ -17,10 +14,12 @@ public class Percolation {
         }
     }              // create N-by-N grid, with all sites blocked
     public void open(int i, int j){
-        //TODO mark this site is open
         checkBound(i, j);
         int site = toOneDimension(i, j);
         openSites[site] = true;
+        if (isTopNode(i, j)){
+            uf.union(site, virtualNode);
+        }
         if (!isOutOfBoundary(i, j - 1) && isOpen(i, j - 1)){ //left
             uf.union(site, toOneDimension(i, j - 1));
         }
@@ -35,6 +34,7 @@ public class Percolation {
         }
     }         // open site (row i, column j) if it is not already
 
+
     public boolean isOpen(int i, int j){
         checkBound(i, j);
         return openSites[toOneDimension(i, j)];
@@ -46,13 +46,16 @@ public class Percolation {
     }   // is site (row i, column j) full?
 
     public boolean percolates(){
-        //TODO is percolates?
         for (int i = N*N - 1; i > N*N - N - 1; i--){
             if (uf.connected(i, virtualNode)){
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean isTopNode(int i, int j) {
+        return i == 1 && (j > 0 && j <= N);
     }
 
     private int toOneDimension(int i, int j) {
