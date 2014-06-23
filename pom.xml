@@ -12,15 +12,11 @@
         <dependency>
             <groupId>edu.princeton.algorithms</groupId>
             <artifactId>stdlib</artifactId>
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${project.basedir}/lib/stdlib-1.0.jar</systemPath>-->
             <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>edu.princeton.algorithms</groupId>
             <artifactId>algs4</artifactId>
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${project.basedir}/lib/algs4-1.0.jar</systemPath>-->
             <version>1.0</version>
         </dependency>
     </dependencies>
