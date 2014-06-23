@@ -1,14 +1,20 @@
 public class Percolation {
     private WeightedQuickUnionUF uf;
     private int N;
-    private int virtualNode;
+    private int topNode;
+    private int bottomNode;
     private boolean[] openSites;
 
     public Percolation(int N) {
         if (N <= 0) throw new IllegalArgumentException("N is out of boundary!");
-        virtualNode = N * N;
-        uf = new WeightedQuickUnionUF(N * N + 1); //uf.id[N * N] is the virtual top node.
         this.N = N;
+        topNode = N * N;
+        bottomNode = N * N + 1;
+        uf = new WeightedQuickUnionUF(N * N + 2); //uf.id[N * N] is the virtual top node,
+        // uf.id[N * N + 1] is the virtual bottom node.
+        for (int j = 1; j < N + 1; j++) {
+            uf.union(toOneDimension(N, j), bottomNode);
+        }
         openSites = new boolean[N * N];
         for (int i = 0; i < N * N; i++) {
             openSites[i] = false;
@@ -20,7 +26,7 @@ public class Percolation {
         int site = toOneDimension(i, j);
         openSites[site] = true;
         if (isTopNode(i, j)) {
-            uf.union(site, virtualNode);
+            uf.union(site, topNode);
         }
         if (!isOutOfBoundary(i, j - 1) && isOpen(i, j - 1)) { //left
             uf.union(site, toOneDimension(i, j - 1));
@@ -43,16 +49,11 @@ public class Percolation {
 
     public boolean isFull(int i, int j) {
         checkBound(i, j);
-        return isOpen(i, j) && uf.connected(toOneDimension(i, j), virtualNode);
+        return isOpen(i, j) && uf.connected(toOneDimension(i, j), topNode);
     }   // is site (row i, column j) full?
 
     public boolean percolates() {
-        for (int j = 1; j < N + 1; j++) {
-            if (isFull(N, j)) {
-                return true;
-            }
-        }
-        return false;
+        return uf.connected(topNode, bottomNode);
     }
 
     private boolean isTopNode(int i, int j) {
