@@ -34,11 +34,11 @@ public class PercolationStats {
     }                  // sample standard deviation of percolation threshold
 
     public double confidenceLo() {
-        return mean() - 1.96 * StdStats.stddevp(probabilities) / Math.sqrt(t);
+        return mean() - 1.96 * stddev() / Math.sqrt(t);
     }            // returns lower bound of the 95% confidence interval
 
     public double confidenceHi() {
-        return mean() + 1.96 * StdStats.stddevp(probabilities) / Math.sqrt(t);
+        return mean() + 1.96 * stddev() / Math.sqrt(t);
     }           // returns upper bound of the 95% confidence interval
 
     public static void main(String[] args) {

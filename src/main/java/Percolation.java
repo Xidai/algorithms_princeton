@@ -1,6 +1,5 @@
 public class Percolation {
     private WeightedQuickUnionUF uf;
-    private WeightedQuickUnionUF bottomUF;
     private int N;
     private int virtualNode;
     private boolean[] openSites;
@@ -9,7 +8,6 @@ public class Percolation {
         if (N <= 0) throw new IllegalArgumentException("N is out of boundary!");
         virtualNode = N * N;
         uf = new WeightedQuickUnionUF(N * N + 1); //uf.id[N * N] is the virtual top node.
-        uf = new WeightedQuickUnionUF(N);
         this.N = N;
         openSites = new boolean[N * N];
         for (int i = 0; i < N * N; i++) {
@@ -49,15 +47,12 @@ public class Percolation {
     }   // is site (row i, column j) full?
 
     public boolean percolates() {
-//        for (int i = N * N - 1; i > N * N - N - 1; i--) {
-//            if (uf.connected(i, virtualNode)) {
-//                return true;
-//            }
-//        }
-//        return false;
-        while (true){
-
+        for (int j = 1; j < N + 1; j++) {
+            if (isFull(N, j)) {
+                return true;
+            }
         }
+        return false;
     }
 
     private boolean isTopNode(int i, int j) {
