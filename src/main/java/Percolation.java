@@ -1,5 +1,6 @@
 public class Percolation {
     private WeightedQuickUnionUF uf;
+    private WeightedQuickUnionUF ufTemp;
     private int N;
     private int topNode;
     private int bottomNode;
@@ -12,8 +13,9 @@ public class Percolation {
         bottomNode = N * N + 1;
         uf = new WeightedQuickUnionUF(N * N + 2); //uf.id[N * N] is the virtual top node,
         // uf.id[N * N + 1] is the virtual bottom node.
+        ufTemp = new WeightedQuickUnionUF(N * N + 2);
         for (int j = 1; j < N + 1; j++) {
-            uf.union(toOneDimension(N, j), bottomNode);
+            ufTemp.union(toOneDimension(N, j), bottomNode);
         }
         openSites = new boolean[N * N];
         for (int i = 0; i < N * N; i++) {
@@ -27,18 +29,23 @@ public class Percolation {
         openSites[site] = true;
         if (isTopNode(i, j)) {
             uf.union(site, topNode);
+            ufTemp.union(site, topNode);
         }
         if (!isOutOfBoundary(i, j - 1) && isOpen(i, j - 1)) { //left
             uf.union(site, toOneDimension(i, j - 1));
+            ufTemp.union(site, toOneDimension(i, j - 1));
         }
         if (!isOutOfBoundary(i - 1, j) && isOpen(i - 1, j)) { //up
             uf.union(site, toOneDimension(i - 1, j));
+            ufTemp.union(site, toOneDimension(i - 1, j));
         }
         if (!isOutOfBoundary(i, j + 1) && isOpen(i, j + 1)) { //right
             uf.union(site, toOneDimension(i, j + 1));
+            ufTemp.union(site, toOneDimension(i, j + 1));
         }
         if (!isOutOfBoundary(i + 1, j) && isOpen(i + 1, j)) { //down
             uf.union(site, toOneDimension(i + 1, j));
+            ufTemp.union(site, toOneDimension(i + 1, j));
         }
     }         // open site (row i, column j) if it is not already
 
@@ -53,7 +60,7 @@ public class Percolation {
     }   // is site (row i, column j) full?
 
     public boolean percolates() {
-        return uf.connected(topNode, bottomNode);
+        return ufTemp.connected(topNode, bottomNode);
     }
 
     private boolean isTopNode(int i, int j) {
