@@ -43,7 +43,7 @@ public class Percolation {
 
     public boolean isFull(int i, int j) {
         checkBound(i, j);
-        return uf.connected(toOneDimension(i, j), virtualNode);
+        return isOpen(i, j) && uf.connected(toOneDimension(i, j), virtualNode);
     }   // is site (row i, column j) full?
 
     public boolean percolates() {
