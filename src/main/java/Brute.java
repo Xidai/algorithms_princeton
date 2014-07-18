@@ -23,13 +23,20 @@ public class Brute {
                         Point p2 = points[j];
                         Point p3 = points[k];
                         Point p4 = points[o];
-                        checkIfIsLineSegment(p1, p2, p3, p4);
+                        if(isLineSegment(p1, p2, p3, p4)){
+                            printLine(p1, p2, p3, p4);
+                        }
                     }
                 }
             }
         }
     }
 
-    private static void checkIfIsLineSegment(Point p1, Point p2, Point p3, Point p4) {
+    private static void printLine(Point p1, Point p2, Point p3, Point p4) {
+        System.out.println(p1 + " -> " + p2 + " -> " + p3 + " -> " + p4);
+    }
+
+    private static boolean isLineSegment(Point p1, Point p2, Point p3, Point p4) {
+        return true;
     }
 }
